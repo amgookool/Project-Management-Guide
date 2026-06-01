@@ -68,7 +68,7 @@
 | **Label(s)** | `spike` + `backend` / `frontend` / `infrastructure` / `api` |
 | **Affected Product(s)** | Web / Mobile / API / Internal Tool |
 | **Reporter** | |
-| **Estimated Hours** | (= Time Box above) |
+| **Story Points** | [ ] 1  [ ] 2  [ ] 3  [ ] 5  [ ] 8  [ ] 13 (= Time Box) |
 
 ---
 

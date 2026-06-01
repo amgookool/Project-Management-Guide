@@ -55,7 +55,7 @@
 |-------|-------|
 | **Epic Link** | [DOL-XXX — Epic Name] |
 | **Priority** | [ ] Low  [ ] Medium  [ ] High  [ ] Critical |
-| **Estimated Hours** | |
+| **Story Points** | [ ] 1  [ ] 2  [ ] 3  [ ] 5  [ ] 8  [ ] 13  [ ] 21 |
 | **Assignee** | [ ] Fullstack  [ ] Backend  [ ] Frontend |
 | **Label(s)** | `frontend` / `backend` / `fullstack` / `mobile` / `api` |
 | **Affected Product(s)** | Web / Mobile / API / Internal Tool |

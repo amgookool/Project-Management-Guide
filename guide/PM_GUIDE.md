@@ -1,7 +1,7 @@
 # 🐬 Dolphin — Project Manager Guide
 
 > **Audience:** Project Manager (you)
-> **Sprint Length:** 2 weeks | **Estimation:** Hours | **Methodology:** Scrum
+> **Sprint Length:** 2 weeks | **Estimation:** Story Points (Fibonacci) | **Methodology:** Scrum
 
 ---
 
@@ -72,25 +72,24 @@ Set up the following Google Chat Spaces:
 
 > See [`SCRUM_CEREMONIES.md`](SCRUM_CEREMONIES.md) for full facilitation guides for each event.
 
-### Capacity Planning
+### Capacity Planning (Story Points)
 
-At the start of each sprint, calculate team capacity:
+Story points measure **relative effort and complexity**, not time. Capacity is tracked in total points the team can complete per sprint — this is called **velocity**.
 
 ```
-Developer daily capacity: ~6 hours of focused dev work (out of 8-hour day)
-Sprint working days: 10
-Raw capacity per developer: 60 hours
+How to establish velocity:
+  - Sprint 1–3: Don't commit hard; observe how many points the team completes
+  - After Sprint 3: Average the completed points across past 3 sprints = team velocity
+  - Example: Team completed 18, 22, 20 points → velocity = ~20 points/sprint
 
 Adjust for:
-  - PTO / holidays: subtract days × 6 hours
-  - Ceremony overhead: ~3 hours per sprint per dev
-  - Buffer (bugs/interruptions): subtract 20%
-
-Formula: (Working days × 6) - ceremony hours - (remaining × 0.20)
-Example: (10 × 6) - 3 - (57 × 0.20) = 60 - 3 - 11.4 = ~45.6 usable hours per dev
+  - PTO / holidays: reduce sprint commitment proportionally
+    (1 dev out for 2 days = lose ~20% of 1/3 of capacity → reduce total by ~7%)
+  - New team or new process: start conservatively (70% of estimated velocity)
+  - Buffer for bugs/interruptions: built into point values, not calculated separately
 ```
 
-Track this in Jira's sprint capacity planner or maintain a simple spreadsheet.
+Track velocity in Jira's built-in Velocity Chart (Backlog → Reports → Velocity Chart).
 
 ---
 
@@ -247,10 +246,10 @@ PM notifies reporter when deployed
 | Metric | How to Measure | Target | Review Frequency |
 |--------|---------------|--------|-----------------|
 | **Sprint Goal Achievement** | % of committed tickets reaching Done | ≥80% | Per sprint |
-| **Sprint Velocity** | Total hours completed per sprint | Track trend (not a target) | Per sprint |
+| **Sprint Velocity** | Total story points completed per sprint | Track trend (not a target) | Per sprint |
 | **Bug Rate** | New bugs logged per sprint | Trending downward | Per sprint |
 | **Cycle Time** | Avg time from "In Progress" → "Done" | < 3 days per ticket | Per sprint |
-| **Blocked Time** | Hours tickets spent in a blocked state | < 10% of cycle time | Per sprint |
+| **Blocked Time** | Days tickets spent in a blocked state | < 10% of cycle time | Per sprint |
 | **Business Request Lead Time** | Days from request intake to sprint planning | < 2 sprints | Monthly |
 
 Track these in a simple Jira dashboard or spreadsheet and review trends in retrospectives.

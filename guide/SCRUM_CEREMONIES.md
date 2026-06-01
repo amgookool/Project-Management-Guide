@@ -132,21 +132,45 @@ Prepare upcoming tickets so that Sprint Planning runs smoothly. Tickets that are
 | Time | Activity |
 |------|----------|
 | 0:00–0:05 | Review backlog at a glance — confirm what's being groomed today |
-| 0:05–0:45 | Walk through each ticket top-down: clarify, refine AC, estimate hours, identify dependencies |
+| 0:05–0:45 | Walk through each ticket top-down: clarify, refine AC, estimate story points, identify dependencies |
 | 0:45–0:55 | Prioritization check — adjust order if needed |
 | 0:55–1:00 | Confirm which tickets are now "Ready" for next sprint |
 
-### Estimation Guidance (Hours)
+### Estimation Guidance — Story Points (Fibonacci)
 
-| Size | Hours | Example |
-|------|-------|---------|
-| XS | 1–2 hrs | Update a UI label, fix a typo, config change |
-| S | 3–5 hrs | Simple CRUD endpoint, small UI component |
-| M | 6–12 hrs | Multi-step form, service integration, medium feature |
-| L | 13–24 hrs | Complex feature, major refactor, new microservice |
-| XL | 24+ hrs | Needs to be broken into smaller stories |
+Story points measure **relative complexity and effort**, not time. The team estimates together using the Fibonacci sequence: **1, 2, 3, 5, 8, 13, 21**.
 
-> If a ticket estimates to more than **24 hours**, break it down into sub-tasks or multiple stories before it enters a sprint.
+| Points | Complexity | What It Feels Like | Example |
+|--------|-----------|-------------------|---------|
+| **1** | Trivial | I've done this a hundred times, no unknowns | Update a text label, fix a typo, change a config value |
+| **2** | Simple | Straightforward, minimal unknowns | Add a field to a form, update a static page, fix a minor CSS issue |
+| **3** | Small | Clear scope, some implementation decisions | Simple CRUD endpoint, small reusable UI component |
+| **5** | Medium | Moderate complexity, a few unknowns | Multi-step form, REST API integration, feature with 3–4 AC items |
+| **8** | Large | Complex, multiple moving parts, significant unknowns | New microservice endpoint, complex UI flow, cross-system integration |
+| **13** | Very Large | High uncertainty, likely needs to be broken down | Major feature, architectural change — consider splitting |
+| **21** | Epic-sized | This should be an Epic, not a story — split it | Multi-week initiative — break into smaller stories |
+
+> 🎯 **The golden rule:** If a story is estimated at **13 or higher**, it's a signal to break it into smaller stories before it enters a sprint. A single sprint story should ideally be **8 points or less**.
+
+### Why Fibonacci and Not 1–10?
+
+The gaps between Fibonacci numbers grow intentionally. The larger the task, the less precise our estimate — and that's okay. The sequence forces the team to make a meaningful choice:
+- Is this a 5 or an 8? That gap forces a real conversation about scope and risk.
+- You can't give everything a "6" — Fibonacci prevents false precision.
+
+### Planning Poker (How to Estimate as a Team)
+
+During Backlog Refinement, use Planning Poker to get unbiased estimates:
+
+1. PM reads the ticket and acceptance criteria aloud
+2. Each developer **privately** picks their estimate (use cards, fingers, or a Planning Poker app)
+3. Everyone reveals at the same time
+4. If estimates align → that's the estimate ✅
+5. If estimates differ → the **highest** and **lowest** estimators explain their reasoning
+6. Team discusses and re-votes until consensus is reached
+7. PM records the agreed estimate on the Jira ticket
+
+> **Never let one person estimate alone.** The developer doing the work is often too optimistic or too pessimistic without the group's perspective.
 
 ### PM Facilitation Tips
 

@@ -72,6 +72,7 @@
 |-------|-------|
 | **Priority** | [ ] Low  [ ] Medium  [ ] High  [ ] Critical |
 | **Severity** | [ ] Low  [ ] Medium  [ ] High  [ ] Critical |
+| **Story Points** | [ ] 1  [ ] 2  [ ] 3  [ ] 5  [ ] 8  [ ] 13  [ ] 21 |
 | **Epic Link** | DOL-XXX (if this bug relates to a known feature area) |
 | **Reporter** | |
 | **Reported By (business)** | |

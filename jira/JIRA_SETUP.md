@@ -89,9 +89,8 @@ Add these custom fields to your project:
 | **Priority** | Single select | All types | Low, Medium, High, Critical |
 | **Epic Link** | Epic link | Story, Bug, Task, Spike | Links to parent Epic |
 | **Sprint** | Sprint | All types | Auto-populated from sprint |
-| **Story Points / Hours** | Number | Story, Task, Bug, Spike | Hours (decimal allowed) |
-| **Estimated Hours** | Number | All types | Set during refinement |
-| **Actual Hours** | Number | All types | Logged by developer |
+| **Story Points** | Number | Story, Task, Bug, Spike | Fibonacci: 1, 2, 3, 5, 8, 13, 21 |
+| **Estimated Hours** | Number | All types | Optional — used for scheduling only, not estimation |
 | **Affected Product** | Multi-select | Bug | Web App, Mobile App, API, Internal Tool |
 | **Reporter** | User | All types | Person who submitted the request |
 | **Severity** | Single select | Bug only | Low, Medium, High, Critical |

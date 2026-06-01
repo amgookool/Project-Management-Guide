@@ -42,7 +42,7 @@ You — the Project Manager — and the development team of 3 (Fullstack, Backen
 
 ## 🗓 Sprint Rhythm at a Glance
 
-> Sprint length: **2 weeks** | Estimation: **Hours** | Priority: **Low / Medium / High / Critical**
+> Sprint length: **2 weeks** | Estimation: **Story Points (Fibonacci: 1, 2, 3, 5, 8, 13, 21)** | Priority: **Low / Medium / High / Critical**
 
 | Sprint Day | Day of Week | Event | Duration |
 |-----------|-------------|-------|----------|

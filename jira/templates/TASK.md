@@ -47,7 +47,7 @@
 | **Task Type** | [ ] Refactor  [ ] DevOps / Infrastructure  [ ] Dependency Upgrade  [ ] Data Migration  [ ] Configuration  [ ] Documentation  [ ] CI/CD  [ ] Other |
 | **Epic Link** | DOL-XXX (if applicable) |
 | **Priority** | [ ] Low  [ ] Medium  [ ] High  [ ] Critical |
-| **Estimated Hours** | |
+| **Story Points** | [ ] 1  [ ] 2  [ ] 3  [ ] 5  [ ] 8  [ ] 13  [ ] 21 |
 | **Assignee** | [ ] Fullstack  [ ] Backend  [ ] Frontend |
 | **Label(s)** | `tech-debt` / `infrastructure` / `backend` / `frontend` / `database` |
 | **Affected Product(s)** | Web / Mobile / API / Internal Tool / All |
