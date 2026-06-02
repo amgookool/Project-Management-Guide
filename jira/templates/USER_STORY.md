@@ -57,8 +57,8 @@
 | **Priority** | [ ] Low  [ ] Medium  [ ] High  [ ] Critical |
 | **Story Points** | [ ] 1  [ ] 2  [ ] 3  [ ] 5  [ ] 8  [ ] 13  [ ] 21 |
 | **Assignee** | [ ] Fullstack  [ ] Backend  [ ] Frontend |
-| **Label(s)** | `frontend` / `backend` / `fullstack` / `mobile` / `api` |
-| **Affected Product(s)** | Web / Mobile / API / Internal Tool |
+| **Label(s)** | `frontend` / `backend` / `fullstack` / `mobile` / `flutter` / `web` / `portal` / `api` / `integration` / `firebase` |
+| **Affected Product(s)** | Portal / Landing-other web / Mobile (Flutter) / Web API / Integration API / Firebase |
 | **Business Requester** | |
 | **Reporter** | |
 | **Sprint Target** | |
@@ -112,9 +112,10 @@
 <!-- Confirm ALL items before moving to Done -->
 - [ ] All acceptance criteria met
 - [ ] Code reviewed and approved (min. 1 reviewer)
-- [ ] All automated tests pass
-- [ ] QA tested and approved in staging
-- [ ] PR merged to main
+- [ ] All automated tests pass / CI green
+- [ ] Merged to `staging` → QA approved on staging (web/API) or TestFlight (mobile)
+- [ ] Web/API: promoted to `main` → live in production. Mobile: QA-approved on TestFlight + submitted to store (see RELEASE_MANAGEMENT.md)
+- [ ] API contract change (if any): new version published + old version's deprecation tracked (API_VERSIONING.md)
 - [ ] Jira ticket updated
 - [ ] Business requester notified
 - [ ] Documentation updated (if applicable)

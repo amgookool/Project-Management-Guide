@@ -58,7 +58,7 @@
 | Field | Value |
 |-------|-------|
 | **Environment** | [ ] Production  [ ] Staging  [ ] Development |
-| **Affected Product** | [ ] Web App  [ ] Mobile App  [ ] API  [ ] Internal Tool |
+| **Affected Product** | [ ] Portal  [ ] Landing/other web  [ ] Mobile (Flutter)  [ ] Web API  [ ] Integration API  [ ] Firebase |
 | **Browser / Client** | e.g., Chrome 124, iOS Safari 17, Android Chrome |
 | **OS / Device** | e.g., macOS 14, iPhone 15, Windows 11 |
 | **App Version / Build** | |
@@ -147,8 +147,7 @@
 - [ ] Root cause identified
 - [ ] Fix implemented and PR approved
 - [ ] All automated tests pass (including new regression test if applicable)
-- [ ] QA verified fix in staging
-- [ ] PR merged to main
-- [ ] Deployed to production
+- [ ] Merged to `staging` → QA verified fix on staging (web/API) or TestFlight (mobile)
+- [ ] Web/API: promoted to `main` → live in production. Mobile: submitted to store (force-update decision recorded if needed)
 - [ ] Original reporter notified
 - [ ] Jira ticket closed

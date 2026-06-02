@@ -2,7 +2,7 @@
 
 > **Who this is for:** A first-time Jira user setting up a Scrum board for a small dev team.
 > **Platform:** Jira Software Cloud (app.atlassian.com)
-> **Team size:** 4 people (PM + 3 developers)
+> **Team size:** 6 people (PM + 3 developers + 1 QA Engineer + 1 Designer)
 > **Free tier:** Supports up to 10 users at no cost — no credit card needed.
 >
 > This guide walks through every step and screen click needed to configure Jira for the Dolphin team. Every section includes a **"Why we do this"** explanation so you understand the purpose behind each decision — not just what to click.
@@ -254,9 +254,9 @@ In Sprint      ──→  In Progress     (developer starts work)
 In Progress    ──→  Code Review     (developer opens PR)
 In Progress    ──→  Blocked         (blocker encountered)
 Blocked        ──→  In Progress     (blocker resolved)
-Code Review    ──→  QA / Testing    (PR approved and merged)
+Code Review    ──→  QA / Testing    (PR approved & merged to `staging` → auto-deploys to staging)
 Code Review    ──→  In Progress     (PR rejected — needs rework)
-QA / Testing   ──→  Done            (QA approved)
+QA / Testing   ──→  Done            (QA approved on staging → promoted to `main` → live in production)
 QA / Testing   ──→  In Progress     (QA failed — needs rework)
 Done           ──→  In Progress     (reopened — bug found post-release)
 ```
@@ -379,8 +379,10 @@ Custom fields let you capture information specific to your team that Jira doesn'
 2. Click **Create custom field**
 3. Select **Checkboxes** (allows multi-select)
 4. Name it: `Affected Product`
-5. Add options: `Web Application`, `Mobile Application`, `API / Microservice`, `Internal Tool`
-6. Click **Create** and then associate it with your Bug screen
+5. Add options: `Portal`, `Landing / other web`, `Mobile App (Flutter)`, `Web API`, `Integration API`, `Firebase`
+6. Click **Create** and then associate it with your Bug screen (and Story screen)
+
+> 💡 **Why these options?** They mirror Dolphin's actual portfolio (see [`../guide/ARCHITECTURE_CONTEXT.md`](../guide/ARCHITECTURE_CONTEXT.md)). "Integration API" is split out from "Web API" because integration APIs face external partners and carry stricter versioning rules ([`../guide/API_VERSIONING.md`](../guide/API_VERSIONING.md)).
 
 **Creating a Custom Field: Environment**
 1. Repeat the process above
@@ -428,12 +430,16 @@ Share this list with your developers so everyone uses the same label names (capi
 | `frontend` | Work is primarily in the UI layer | PM can filter board to see Frontend Dev's scope |
 | `backend` | Work is primarily in services/APIs/DB | PM can filter board to see Backend Dev's scope |
 | `fullstack` | Work spans both UI and API | Indicates cross-team dependency |
-| `mobile` | Work affects the mobile application | Separate from `web` — different team capacity |
-| `web` | Work affects the web application | |
-| `api` | Work is building or changing an API endpoint | |
+| `mobile` | Work affects the mobile application | Separate from `web` — separate repo & release pipeline |
+| `flutter` | Mobile work specifically in the Flutter codebase | Lives in the separate mobile repo |
+| `web` | Work affects a web application | |
+| `portal` | Work affects the Portal SvelteKit SPA specifically | Distinguishes the main app from landing/other web |
+| `api` | Work is building or changing an API endpoint | Web API or Integration API |
+| `integration` | Work on an Integration API (external third party) | Triggers strict API versioning ([`API_VERSIONING.md`](../guide/API_VERSIONING.md)) |
+| `firebase` | Firestore, Firebase Auth, Storage, or Cloud Functions config | Often cross-product — flag consumers |
 | `internal-tool` | Work affects internal dashboards/tools | Lower business visibility but still tracked |
-| `infrastructure` | DevOps, CI/CD, cloud, server config | Invisible to users but critical |
-| `database` | Schema changes, migrations, queries | High-risk — needs careful review |
+| `infrastructure` | DevOps, GitHub Actions, Firebase config | Invisible to users but critical |
+| `database` | Firestore data-shape / security-rule changes | High-risk, cross-product — needs careful review |
 | `security` | Authentication, permissions, vulnerabilities | Always High or Critical priority |
 | `performance` | Speed improvements, caching, load testing | |
 | `tech-debt` | Refactoring, cleanup, paying down past shortcuts | |
@@ -541,6 +547,8 @@ If you upgrade to a paid tier later, you'll want these roles:
 |--------|------|-----------------|
 | **You (PM)** | **Project Admin** | Create/edit/delete anything, configure settings |
 | **Developers** | **Developer** | Create issues, edit issues, transition statuses, log work |
+| **QA Engineer** | **Developer** | Transition tickets through **QA / Testing → Done**, log defects, reopen failed tickets |
+| **Designer** | **Developer** | Attach mockups, comment on stories, transition design work |
 | **Business Team** | **Reporter** | Create issues and view the board — cannot edit or transition |
 | **Stakeholders** | **Viewer** | Read-only access |
 
@@ -600,12 +608,27 @@ This fires when a developer creates a Git branch containing the ticket ID.
 
 ---
 
-**Rule 3: When a PR is Merged → Move to QA / Testing**
+**Rule 3: When a PR is Merged to `staging` → Move to QA / Testing**
+
+Merging to `staging` triggers a GitHub Actions deploy to the **staging** environment — which is exactly where QA verifies. So this is the trigger for **QA / Testing** (NOT a merge to `main`).
 
 1. **Trigger:** `Pull request merged`
-2. **Condition:** *(none)*
+2. **Condition:** `Pull request` → destination branch **equals `staging`**
 3. **Action:** `Transition issue` → **QA / Testing**
-4. Name: `Auto: PR merged → QA/Testing`
+4. Name: `Auto: PR merged to staging → QA/Testing`
+
+---
+
+**Rule 3b: When code reaches `main` (production) → Move to Done**
+
+A merge/promotion to `main` triggers the GitHub Actions deploy to **production** — the change is now live. (Mobile does not follow this rule — see [`../guide/RELEASE_MANAGEMENT.md`](../guide/RELEASE_MANAGEMENT.md) §2.)
+
+1. **Trigger:** `Pull request merged`
+2. **Condition:** `Pull request` → destination branch **equals `main`**
+3. **Action:** `Transition issue` → **Done**
+4. Name: `Auto: Promoted to main (prod) → Done`
+
+> ⚠️ **Critical correction:** Earlier drafts moved tickets to QA when a PR merged to `main`. But `main` is **production** — QA must happen *before* that, on `staging`. The branch conditions above keep the board honest: `staging` = "ready for QA," `main` = "live / Done."
 
 ---
 
@@ -647,7 +670,7 @@ Gadgets are the widgets you add to the dashboard. Click **Add gadget** to see th
 ---
 
 **Burndown Chart**
-- What it shows: Hours/points remaining in the sprint vs. an ideal trend line
+- What it shows: Story points remaining in the sprint vs. an ideal trend line
 - Configuration: Select your project (DOL), set to current sprint
 - Why it matters: The burndown is the single most important chart for a PM. If the line is above the ideal trend, the team is behind. If it drops suddenly, work was added or estimated incorrectly. Check this every morning.
 
@@ -685,6 +708,14 @@ Gadgets are the widgets you add to the dashboard. Click **Add gadget** to see th
 - What it shows: Story points completed per sprint over time
 - Configuration: Project = DOL, last 8 sprints
 - Why it matters: Your velocity trend is how you predict future sprint capacity. After 3 sprints, you'll have a reliable average.
+
+> ⚠️ **Velocity counts Stories only at Dolphin.** Jira's built-in Velocity Chart sums **all** completed pointed issues — including Bugs, Tasks, and Spikes — so it will *overstate* feature throughput. Two ways to honor the "Stories only" rule:
+> 1. **Simplest:** only put Story Points on **Stories**. Size Bugs/Tasks/Spikes during planning for capacity, but leave their Story Points field empty so the chart reflects story throughput. *(Trade-off: those items won't appear in the burndown.)*
+> 2. **More complete:** point everything (for an accurate burndown) and track story-only velocity with a saved filter / "Two Dimensional Filter" gadget using this JQL, summing Story Points:
+>    ```
+>    project = DOL AND issuetype = Story AND sprint in closedSprints() AND statusCategory = Done
+>    ```
+> Pick one approach and apply it consistently. See [`../guide/PM_GUIDE.md`](../guide/PM_GUIDE.md) §4.
 
 ---
 

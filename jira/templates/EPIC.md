@@ -66,20 +66,21 @@
 ## 🏗 Affected Products / Systems
 
 <!-- Check all that apply -->
-- [ ] Web Application
-- [ ] Mobile Application
-- [ ] API / Microservices
-- [ ] Internal Tools / Dashboard
-- [ ] Database / Data Layer
-- [ ] Infrastructure / DevOps
+- [ ] Portal (SvelteKit web app)
+- [ ] Landing Page / other web
+- [ ] Mobile App (Flutter)
+- [ ] Web API (Cloud Functions + Express)
+- [ ] Integration API (external third party)
+- [ ] Firebase (Firestore / Auth / Storage)
+- [ ] Infrastructure / CI-CD
 
 ---
 
 ## 📋 Child Stories (to be created and linked)
 
 <!-- List the major stories that will be created under this Epic -->
-| Story Title | Assignee | Estimated Hours | Sprint Target |
-|------------|---------|----------------|--------------|
+| Story Title | Assignee | Story Points | Sprint Target |
+|------------|---------|-------------|--------------|
 | | | | |
 | | | | |
 | | | | |

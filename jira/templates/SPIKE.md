@@ -134,7 +134,7 @@
 
 
 **Estimated effort for recommended approach:**
-- Estimated hours if we go forward:
+- Rough story-point estimate if we go forward:
 - Follow-up stories to create: DOL-___, DOL-___
 
 ---

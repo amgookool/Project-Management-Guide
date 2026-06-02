@@ -49,8 +49,8 @@
 | **Priority** | [ ] Low  [ ] Medium  [ ] High  [ ] Critical |
 | **Story Points** | [ ] 1  [ ] 2  [ ] 3  [ ] 5  [ ] 8  [ ] 13  [ ] 21 |
 | **Assignee** | [ ] Fullstack  [ ] Backend  [ ] Frontend |
-| **Label(s)** | `tech-debt` / `infrastructure` / `backend` / `frontend` / `database` |
-| **Affected Product(s)** | Web / Mobile / API / Internal Tool / All |
+| **Label(s)** | `tech-debt` / `infrastructure` / `backend` / `frontend` / `database` / `firebase` / `api` / `integration` |
+| **Affected Product(s)** | Portal / Landing-other web / Mobile (Flutter) / Web API / Integration API / Firebase / All |
 | **Reporter** | |
 
 ---
@@ -114,8 +114,8 @@
 
 - [ ] All requirements in the checklist above are completed
 - [ ] Code reviewed and approved (min. 1 reviewer)
-- [ ] All tests pass (no regressions)
-- [ ] Deployed to staging and verified
+- [ ] All tests pass (no regressions) / CI green
+- [ ] Merged to `staging` → deployed to staging and verified
 - [ ] Relevant documentation updated
-- [ ] PR merged to main
+- [ ] Promoted to `main` → deployed to production (= live)
 - [ ] Jira ticket updated to Done
