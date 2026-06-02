@@ -20,19 +20,27 @@ You are the **single point of contact** between the business team and the develo
 
 ## 2. Team Structure
 
+The team is **6 people**: you (PM), three developers, a dedicated QA Engineer, and a dedicated Designer.
+
 | Person | Role | Primary Focus |
 |--------|------|---------------|
 | **You** | Project Manager | Backlog, ceremonies, stakeholder comms, blocker removal |
-| **Developer 1** | Fullstack Developer | Cross-cutting features across frontend + backend, monorepo coordination |
-| **Developer 2** | Backend Developer | APIs, microservices, database design, integrations, infrastructure |
-| **Developer 3** | Frontend Developer | Web UI (React/Angular/etc.), mobile UI, design system implementation |
+| **Developer 1** | Fullstack Developer | Cross-cutting features across web frontend + Firebase/Cloud Functions APIs |
+| **Developer 2** | Backend Developer | Web APIs & integration APIs (GCF + Express), Firestore data model, Firebase Auth/Storage, infrastructure |
+| **Developer 3** | Frontend Developer | Web UI (SvelteKit Portal, landing, other web), Flutter mobile UI, design-system implementation |
+| **QA Engineer** | Quality Assurance | Verifies every ticket on staging (web/API) and TestFlight (mobile); owns the **QA / Testing** stage and final sign-off |
+| **Designer** | UX / UI Design | Mockups, prototypes, design system; produces the designs that UI stories depend on |
+
+> For the full picture of *what* the team builds (Portal, landing, Web APIs, Integration APIs, Flutter mobile) and *how* it ships, see [`ARCHITECTURE_CONTEXT.md`](ARCHITECTURE_CONTEXT.md).
 
 ### Assigning Work — Rules of Thumb
 
 - **Features with UI + API work** → Assign to Fullstack Dev OR split sub-tasks between Frontend + Backend Devs
-- **Pure API / service / DB work** → Backend Dev
-- **Pure UI / mobile work** → Frontend Dev
-- **Cross-team dependencies** → Flag early in sprint planning; create a sub-task for each developer
+- **Pure API / service / Firestore work** → Backend Dev
+- **Pure web/mobile UI work** → Frontend Dev (**only after the Designer has delivered the mockups**)
+- **UI work without a design** → not Ready; the Designer's mockup is part of the Definition of Ready (§7)
+- **Anything user-facing** → the QA Engineer verifies it before it reaches **Done** (§8)
+- **Cross-product dependencies** (API → web/mobile consumers) → sequence the API first; see [`ARCHITECTURE_CONTEXT.md`](ARCHITECTURE_CONTEXT.md) §5. Flag early in planning; create a sub-task per person.
 
 ---
 
@@ -43,10 +51,12 @@ Set up the following Google Chat Spaces:
 | Space | Members | Purpose |
 |-------|---------|---------|
 | `#dolphin-general` | Everyone | Company-wide announcements |
-| `#dolphin-dev` | PM + all 3 devs | Dev team discussions, technical decisions |
-| `#dolphin-standups` | PM + all 3 devs | Async standup posts (use template in Ceremonies Guide) |
-| `#dolphin-bugs` | PM + devs + business | Bug reports submitted by anyone |
-| `#dolphin-releases` | PM + devs + business | Deployment and release announcements |
+| `#dolphin-dev` | PM + 3 devs + QA + Designer | Dev team discussions, technical decisions |
+| `#dolphin-standups` | PM + 3 devs + QA + Designer | Async standup posts (use template in Ceremonies Guide) |
+| `#dolphin-design` | PM + Designer + devs | Design hand-offs, mockup review, design-system decisions |
+| `#dolphin-qa` | PM + QA + devs | QA results, staging/TestFlight test reports, defects found in QA |
+| `#dolphin-bugs` | PM + devs + QA + business | Bug reports submitted by anyone |
+| `#dolphin-releases` | PM + devs + QA + business | Deployment and release announcements (web continuous; mobile per build) |
 | `#dolphin-biz-requests` | PM + business team | Business team submits new feature/change requests |
 
 ### Golden Rules for Communication
@@ -75,6 +85,8 @@ Set up the following Google Chat Spaces:
 ### Capacity Planning (Story Points)
 
 Story points measure **relative effort and complexity**, not time. Capacity is tracked in total points the team can complete per sprint — this is called **velocity**.
+
+> 🎯 **Velocity counts Stories only.** Only **Story** points contribute to the velocity metric — it measures *feature throughput delivered to users*. Bugs, Tasks, and Spikes are still estimated in story points (so you can plan realistic total sprint capacity), but their points are **excluded from velocity**. When planning a sprint, commit Story points up to your velocity, then fit bugs/tasks/spikes into the remaining capacity. See the velocity-tracking note in [`../jira/JIRA_SETUP.md`](../jira/JIRA_SETUP.md) §12 for how to report story-only velocity in Jira.
 
 ```
 How to establish velocity:
@@ -162,11 +174,12 @@ A ticket must meet ALL criteria before it can be pulled into a sprint:
 - [ ] Clear, concise title
 - [ ] User story format (if applicable): *"As a [user], I want to [action] so that [benefit]"*
 - [ ] Acceptance criteria written (testable, specific)
-- [ ] Estimated in hours by the development team
+- [ ] **Estimated in story points** by the development team (Planning Poker, Fibonacci)
 - [ ] Priority set (Low / Medium / High / Critical)
 - [ ] Linked to parent Epic (if applicable)
-- [ ] Dependencies identified and noted
-- [ ] Design mockups attached (if UI work is involved)
+- [ ] Dependencies identified and noted — including **cross-product sequencing** (API before web/mobile consumers)
+- [ ] **Design mockups delivered by the Designer and attached** (if UI work is involved)
+- [ ] If it changes an API contract → versioning impact assessed ([`API_VERSIONING.md`](API_VERSIONING.md))
 - [ ] No blocking issues at time of sprint planning
 
 ---
@@ -179,12 +192,22 @@ A ticket is **Done** when ALL of the following are true:
 - [ ] Code written and pushed to feature branch (`DOL-[id]/description`)
 - [ ] Pull Request opened and linked to Jira ticket
 - [ ] PR reviewed and approved by at least 1 other developer
-- [ ] All automated tests pass (unit + integration)
-- [ ] Code merged to `main` (or appropriate base branch)
-- [ ] QA tested and approved in staging environment
+- [ ] All automated tests pass (unit + integration); CI checks green
+- [ ] Merged to `staging` and auto-deployed to the **staging** environment
+- [ ] **QA Engineer** tested and approved — on **staging** (web/API) or **TestFlight / internal testing** (mobile)
 - [ ] Jira ticket moved to **Done** status
 - [ ] Business stakeholder notified (for user-facing features)
-- [ ] Documentation updated (if behavior changed)
+- [ ] Documentation updated (if behavior changed) — including **API contract/docs** if a contract changed
+
+**Platform-specific additions to "Done":**
+
+| Platform | Additional "Done" criteria |
+|----------|---------------------------|
+| **Web / API** | Promoted to `main` → auto-deployed to **production** (= live). See [`RELEASE_MANAGEMENT.md`](RELEASE_MANAGEMENT.md) §1. |
+| **API contract change** | New version published, old version's deprecation tracked with a sunset date ([`API_VERSIONING.md`](API_VERSIONING.md)). |
+| **Mobile (Flutter)** | QA-approved on TestFlight/internal testing **and submitted to the store**; force-update / minimum-version decision recorded. Production release tracked via Fix Version (store review lag means "Done" ≠ "live"). See [`RELEASE_MANAGEMENT.md`](RELEASE_MANAGEMENT.md) §2.6. |
+
+> ⚠️ **Note on environments:** `main` is **production**, not a staging gate. QA happens on `staging` *before* promotion to `main`. Do not treat "merged to main" as "ready for QA" — by then it is already live.
 
 ---
 
@@ -224,19 +247,29 @@ PM notifies reporter when deployed
 
 ## 10. Release Management
 
-### Release Cadence
+> 📖 **Full detail lives in [`RELEASE_MANAGEMENT.md`](RELEASE_MANAGEMENT.md).** This is the summary.
 
-- **Standard releases** align with sprint end (every 2 weeks)
-- **Hotfixes** can be deployed any time for Critical bugs
-- **Feature flags** are encouraged for large or risky features
+Dolphin has **two release models** — don't conflate them:
 
-### Pre-Release Checklist
+| | Web / APIs | Mobile (Flutter) |
+|---|-----------|------------------|
+| **How it ships** | GitHub Actions: merge to `staging` → staging env; promote to `main` → **production** | Build → TestFlight/internal testing → store review → release |
+| **Cadence** | **Continuous** — merging is shipping, any day of the sprint | Its own schedule, gated by Apple/Google review (hours–days) |
+| **"Done" = live?** | Yes, once on `main` | No — store review lag; "Done" = QA-approved + submitted |
+| **Old versions live?** | No | **Yes** — managed via force update / minimum supported version |
 
-- [ ] All sprint tickets in **Done** status
-- [ ] QA signed off on all changes
+- Web/API releases **do not** wait for sprint end — they go live when promoted to `main`.
+- **Hotfixes** follow the per-platform fast path in [`RELEASE_MANAGEMENT.md`](RELEASE_MANAGEMENT.md) §4. For the installed mobile base, the **force-update minimum version** is the real emergency lever (store review can't be skipped).
+- **Feature flags** (e.g. Firebase Remote Config) are encouraged for large or risky features, and let you decouple "deployed" from "released."
+
+### Pre-Release Checklist (summary)
+
+- [ ] All included tickets in **Done** status
+- [ ] QA signed off (staging for web/API, TestFlight for mobile)
 - [ ] Release notes written (brief summary for business team)
-- [ ] Deployment steps confirmed with Backend Dev
-- [ ] Rollback plan identified
+- [ ] **Fix Version** set on every included ticket
+- [ ] Rollback / halt-rollout plan identified
+- [ ] Mobile: force-update / minimum-version decision made
 - [ ] PM announces release in `#dolphin-releases`
 
 ---
@@ -246,7 +279,7 @@ PM notifies reporter when deployed
 | Metric | How to Measure | Target | Review Frequency |
 |--------|---------------|--------|-----------------|
 | **Sprint Goal Achievement** | % of committed tickets reaching Done | ≥80% | Per sprint |
-| **Sprint Velocity** | Total story points completed per sprint | Track trend (not a target) | Per sprint |
+| **Sprint Velocity** | Story points completed **from Stories only** per sprint (bugs/tasks/spikes excluded) | Track trend (not a target) | Per sprint |
 | **Bug Rate** | New bugs logged per sprint | Trending downward | Per sprint |
 | **Cycle Time** | Avg time from "In Progress" → "Done" | < 3 days per ticket | Per sprint |
 | **Blocked Time** | Days tickets spent in a blocked state | < 10% of cycle time | Per sprint |
@@ -257,6 +290,21 @@ Track these in a simple Jira dashboard or spreadsheet and review trends in retro
 ---
 
 ## 12. GitHub + Jira Integration
+
+### Repos & Branch Model
+
+Dolphin spans **two repos** — the TypeScript monorepo (Portal, landing, other web, Web APIs, Integration APIs) and the **Flutter mobile repo** (migration in progress). The same `DOL-[id]` key is used in both. See [`ARCHITECTURE_CONTEXT.md`](ARCHITECTURE_CONTEXT.md).
+
+**Long-lived branches drive deployment (via GitHub Actions):**
+
+| Branch | Auto-deploys to |
+|--------|-----------------|
+| `staging` | Staging Firebase environment |
+| `main` | **Production** Firebase environment |
+
+**Promotion flow:** `feature → staging (QA here) → main (production)`.
+
+> 🔎 *Confirm this matches the team's actual model — see [`ARCHITECTURE_CONTEXT.md`](ARCHITECTURE_CONTEXT.md) §3.*
 
 ### Branch Naming
 
@@ -289,8 +337,11 @@ DOL-789: Refactor auth middleware
 |--------------|----------------|
 | Branch created with `DOL-[id]` | Move ticket → **In Progress** |
 | PR opened | Move ticket → **Code Review** |
-| PR merged to main | Move ticket → **QA / Testing** |
+| PR merged to **`staging`** (deploys to staging) | Move ticket → **QA / Testing** |
+| Promoted/merged to **`main`** (deploys to production) | Move ticket → **Done** |
 | PR closed without merge | Move ticket → **In Progress** |
+
+> ⚠️ **Corrected from the old single-environment assumption.** QA happens on **staging**, so the merge that triggers **QA / Testing** is the merge to `staging` — not `main`. Reaching `main` means it's **in production**, which is the trigger for **Done** (for web/API). Mobile does not follow this Git-driven transition — see [`RELEASE_MANAGEMENT.md`](RELEASE_MANAGEMENT.md) §2.
 
 ---
 

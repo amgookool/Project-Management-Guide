@@ -1,7 +1,7 @@
 # 🐬 Dolphin — Scrum Ceremonies Playbook
 
 > **Sprint Length:** 2 weeks (10 working days)
-> **Team:** PM (Scrum Master / PO proxy) + Fullstack Dev + Backend Dev + Frontend Dev
+> **Team:** PM (Scrum Master / PO proxy) + Fullstack Dev + Backend Dev + Frontend Dev + QA Engineer + Designer
 
 ---
 
@@ -21,7 +21,7 @@ Mon     Tue  Wed  Thu  Fri               Mon  Tue  Wed   Thu  Fri
 
 **When:** Day 1 of each sprint (Monday morning)
 **Duration:** 2 hours
-**Attendees:** PM + all 3 developers
+**Attendees:** PM + 3 developers + QA Engineer + Designer
 **Location:** Google Meet or in-person
 
 ### Purpose
@@ -40,9 +40,11 @@ Align the team on what will be built this sprint and how. By the end, every deve
 |------|----------|
 | 0:00–0:10 | **Opening** — Review capacity and sprint goal draft |
 | 0:10–0:50 | **Part 1: What** — PM presents top backlog items; team asks clarifying questions; stories are accepted into sprint |
-| 0:50–1:40 | **Part 2: How** — Team discusses approach for each ticket; tasks/sub-tasks created; hours confirmed |
+| 0:50–1:40 | **Part 2: How** — Team discusses approach for each ticket; tasks/sub-tasks created; **story point estimates confirmed**; cross-product order set (API before consumers) |
 | 1:40–1:55 | **Commit** — Team confirms sprint commitment fits capacity; sprint goal finalized |
 | 1:55–2:00 | **Wrap up** — Sprint officially started in Jira |
+
+> **Sequencing during planning:** For any feature spanning API + web/mobile, agree the order explicitly — the API/Firestore story lands first, consumers follow. See [`ARCHITECTURE_CONTEXT.md`](ARCHITECTURE_CONTEXT.md) §5. Confirm UI stories have **Designer mockups attached** before committing them.
 
 ### Sprint Goal Format
 
@@ -64,7 +66,7 @@ Align the team on what will be built this sprint and how. By the end, every deve
 
 **When:** Every weekday, same time (suggested: 9:30 AM)
 **Duration:** 15 minutes (hard stop)
-**Attendees:** PM + all 3 developers
+**Attendees:** PM + 3 developers + QA Engineer + Designer
 **Format:** Google Meet OR async in `#dolphin-standups` (team decides)
 
 ### Purpose
@@ -114,7 +116,7 @@ Quickly surface progress, plans, and blockers. This is NOT a status report to th
 
 **When:** Mid-sprint, Day 7 (Wednesday of Week 2)
 **Duration:** 1 hour
-**Attendees:** PM + all 3 developers
+**Attendees:** PM + 3 developers + QA Engineer + Designer
 **Goal:** Keep 2 sprints worth of backlog in a "Ready" state
 
 ### Purpose
@@ -125,7 +127,10 @@ Prepare upcoming tickets so that Sprint Planning runs smoothly. Tickets that are
 - [ ] Next sprint's candidate tickets identified and sorted by priority
 - [ ] Business requests translated into stories with draft acceptance criteria
 - [ ] Epics reviewed for progress and scope
+- [ ] **Designer briefed on upcoming UI stories** so mockups are ready *before* those stories are pulled into a sprint (design is part of the Definition of Ready)
 - [ ] Any unclear items noted for discussion
+
+> **Roles in refinement:** The **Designer** walks through mockups for UI stories. The **QA Engineer** pressure-tests the acceptance criteria — "how would I verify this?" — and flags untestable AC and missing edge cases before the story is called Ready. For API stories, confirm whether the change is **breaking** ([`API_VERSIONING.md`](API_VERSIONING.md) §3).
 
 ### Agenda
 
@@ -151,6 +156,8 @@ Story points measure **relative complexity and effort**, not time. The team esti
 | **21** | Epic-sized | This should be an Epic, not a story — split it | Multi-week initiative — break into smaller stories |
 
 > 🎯 **The golden rule:** If a story is estimated at **13 or higher**, it's a signal to break it into smaller stories before it enters a sprint. A single sprint story should ideally be **8 points or less**.
+
+> 📊 **Velocity counts Stories only.** Estimate Bugs, Tasks, and Spikes too (you need them for capacity), but only **Story** points feed the velocity trend. Commit Story points up to the team's velocity, then fit bugs/tasks/spikes into the remaining capacity. See [`PM_GUIDE.md`](PM_GUIDE.md) §4.
 
 ### Why Fibonacci and Not 1–10?
 
@@ -185,7 +192,7 @@ During Backlog Refinement, use Planning Poker to get unbiased estimates:
 
 **When:** Day 10 of sprint (Friday afternoon)
 **Duration:** 45 minutes
-**Attendees:** PM + all 3 developers + business stakeholders
+**Attendees:** PM + 3 developers + QA Engineer + Designer + business stakeholders
 **Format:** Google Meet with screen sharing
 
 ### Purpose
@@ -231,7 +238,7 @@ PM captures all stakeholder feedback during the review:
 
 **When:** Immediately after Sprint Review, Day 10 (Friday)
 **Duration:** 45 minutes
-**Attendees:** PM + all 3 developers (NO business stakeholders)
+**Attendees:** PM + 3 developers + QA Engineer + Designer (NO business stakeholders)
 **Format:** Psychological safety is paramount — this is a safe space
 
 ### Purpose
@@ -295,3 +302,6 @@ Use a shared Google Doc or Jamboard with three columns:
 | Retrospective without action items | Nothing improves | Require 1 specific action every retro |
 | Demo of unfinished work | Confuses stakeholders and erodes trust | Only demo Done tickets |
 | Extending standups to solve problems | Wastes everyone's time | Table it: "Let's take that offline" |
+| Everything lands in QA on Day 9–10 | QA can't verify a sprint's work in two days; tickets slip or skip QA | **Code-complete target = Day 8.** Work not in QA by Day 9 likely won't reach Done this sprint — plan for it, don't pretend. |
+| Web/mobile consumer built before its API | Consumer is blocked or built against a guess | Sequence the API story first ([`ARCHITECTURE_CONTEXT.md`](ARCHITECTURE_CONTEXT.md) §5) |
+| UI story pulled in without a mockup | Dev guesses the design, rework follows | Designer mockup is part of Definition of Ready |

@@ -160,7 +160,7 @@ PM Creates Jira Ticket (within 2 business days)
      ▼
 Backlog Refinement (mid-sprint)
      │
-     │ Dev team reviews, asks questions, estimates hours
+     │ Dev team reviews, asks questions, estimates in story points
      │ Ticket marked "Ready" if meets DoR
      ▼
 Sprint Planning (start of sprint)
